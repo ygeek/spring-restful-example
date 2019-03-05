@@ -25,11 +25,11 @@ public class UserServiceImpl implements IUserService {
     private UserDao userRepository;
     private UserDetailsService userDetailsService;
     @Autowired
-    public UserServiceImpl(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDao userRepository,UserDetailsService userDetailsService) {
+    public UserServiceImpl(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDao userRepository,UserDetailsService customUserService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
-        this.userDetailsService =userDetailsService;
+        this.userDetailsService =customUserService;
     }
 
 
