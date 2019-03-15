@@ -1,0 +1,23 @@
+create table user(
+userid integer,
+username text,
+password text,
+version date,
+constraint user_pk primary key(userid)
+);
+
+create table role(
+roleid integer,
+rolename text,
+version timestamp,
+constraint role_pk primary key(roleid)
+);
+
+create table UserRole(
+urid integer,
+userid integer,
+roleid role,
+constraint ur_pk primary key(urid),
+constraint ur_userid_fk foreign key(userid) references user(userid),
+constraint ur_roleid_fk foreign key(roleid) references role(roleid)
+);

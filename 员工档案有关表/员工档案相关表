@@ -1,0 +1,96 @@
+create table country(                                                            国家表
+countryid serial,                                                                国家id
+countryname text,                                                                国家名字
+constraint country_pk primary key(countryid)                                     主键为国家id
+);
+
+create table employeepersonalinformation(                                        员工个人信息表
+emiid serial,                                                                    表内id
+employeeid integer unique,                                                       员工编号
+employeephoto text,                                                              员工照片地址
+chinesename text not null,                                                       中文名称
+englishname text not null,                                                       英文名称
+sex integer check(sex in (0,1)),                                                 性别 check约束
+countryid integer,                                                               国家id
+birthday date,                                                                   生日
+IDtype integer check(IDtype in (1,2,3,4,5,6)),                                   证件类型 check约束
+IDnumber integer,                                                                证件号码
+constraint employeepersonalinformation_pk primary key(emiid,employeeid),         主键为复合主键
+constraint epi_countryid_fk foreign key(countryid) references country(countryid) 外键
+);
+
+create table Venue(                                                              场馆表
+venueid serial,                                                                  场馆id
+venuename text,                                                                  场馆名称
+constraint veneu_pk primary key(venueid)                                         主键为场馆id
+);
+
+create table department(                                                         部门表
+departmentid serial,                                                             部门id
+departmentname text,                                                             部门名称
+constraint department_pk primary key(departmentid)                               主键为部门id
+);
+
+create table emgroup(                                                            组别表
+groupid serial,                                                                  组别id
+groupname text,                                                                  组别名称
+constraint group_pk primary key(groupid)                                         主键为组别id
+);
+
+create table position(                                                           职位表
+positionid serial,                                                               职位id
+positionname text,                                                               职位名称
+constraint position_pk primary key(positionid)                                   主键为职位id
+);
+
+create table positiondetails(                                                    职位明细表
+pdid serial,                                                                     表内id
+positionid integer,                                                              职位id
+groupid integer,                                                                 所属组别
+departmentid integer,                                                            所属部门
+venueid integer,                                                                 所属场馆
+constraint positiondetails_pk primary key(pdid),         
+constraint pd_positionid_fk foreign key(positionid) references position(positionid),
+constraint pd_groupid_fk foreign key(groupid) references emgroup(groupid),
+constraint pd_departmentid_fk foreign key(departmentid) references department(departmentid),
+constraint pd_venueid_fk foreign key(venueid) references Venue(venueid)
+);
+
+create table employeeworkinfomation(                                             员工工作信息表
+ewiid serial,                                                                    表内id 主键
+employeeid integer,                                                              员工编号
+entrytime date,                                                                  入职时间
+company integer check(company in (1,2,3,4)),                                     公司id
+venueid integer,                                                                 所属场馆
+departmentid integer,                                                            所属部门
+groupid integer,                                                                 所属组别
+positionid integer,                                                              所属职位
+jobtype integer check(jobtype > 0 and jobtype < 9),                              在职类别
+belongtype integer check(belongtype in (0,1)),                                   员工归属类别
+salary date,                                                                     年资计算日期
+constraint employeeworkinfomation_pk primary key(ewiid),                                
+constraint ewi_positionid_fk foreign key(positionid) references position(positionid),
+constraint ewi_groupid_fk foreign key(groupid) references emgroup(groupid),
+constraint ewi_departmentid_fk foreign key(departmentid) references department(departmentid),
+constraint ewi_venueid_fk foreign key(venueid) references Venue(venueid),
+constraint ewi_employeeid_fk foreign key(employeeid) references employeepersonalinformation(employeeid)
+);
+
+
+create table employeeattendanceinformation (                                     员工考勤信息表
+eaiid serial,                                                                    表内id
+employeeid  integer,                                                             员工编号
+workshiftstate boolean,                                                          是否轮班
+clockstate boolean,                                                              是否需要打卡
+overtimestate boolean,                                                           是否加班
+clockdate date,                                                                  打卡开始时间
+overtimedate date,                                                               加班开始时间
+constraint eai_employeeid_fk foreign key(employeeid) references employeepersonalinformation(employeeid)
+);
+
+员工福利信息表：  
+员工薪酬信息表+医疗资讯
+员工专业能力表：工作经验  专业资格  学历信息  语言能力 电脑 技能 
+员工家庭信息表：
+员工合同文件表：
+
